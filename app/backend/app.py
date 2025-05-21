@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 from flask_cors import CORS
 import time
 import random
@@ -15,6 +15,14 @@ REQUEST_LATENCY = Histogram('app_request_latency_seconds', 'Request latency in s
 
 # Start prometheus metrics server on port 8000
 start_http_server(8000)
+
+@app.route('/')
+def home():
+    return "SRE Demo API is running!"
+
+@app.route('/metrics')
+def metrics():
+    return Response(prometheus_client.generate_latest(), mimetype='text/plain')
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
