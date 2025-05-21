@@ -42,6 +42,42 @@ This project demonstrates Site Reliability Engineering (SRE) principles using a 
 - **Grafana:**
   - `grafana/provisioning/`: Dashboards and datasources auto-provisioned
   - `app-dashboard.json`: Example dashboard
+  
+  Recommended SRE Dashboard: Key Metrics & Explanations
+1. Request Rate
+Metric: Total HTTP requests per second
+Prometheus Query:
+sum(rate(app_request_count_total[1m]))
+Why: Shows overall system load and traffic. Spikes or drops can indicate issues or usage changes.
+2. Error Rate
+Metric: Percentage of requests returning 5xx (server errors)
+Prometheus Query:
+sum(rate(app_request_count_total{http_status=~"5.."}[1m])) / sum(rate(app_request_count_total[1m]))
+Why: High error rates mean users are experiencing failures. This is a core SLI for reliability.
+3. Request Latency (P50, P90, P99)
+Metric: Response time percentiles (median, 90th, 99th)
+Prometheus Queries:
+P50: histogram_quantile(0.5, sum(rate(app_request_latency_seconds_bucket[1m])) by (le))
+P90: histogram_quantile(0.9, sum(rate(app_request_latency_seconds_bucket[1m])) by (le))
+P99: histogram_quantile(0.99, sum(rate(app_request_latency_seconds_bucket[1m])) by (le))
+Why: Shows how fast your app responds for most users (P50), for the slowest 10% (P90), and for the slowest 1% (P99). SLOs are often set on P90 or P99.
+4. Resource Usage
+CPU Usage:
+Metric: Total CPU seconds used
+Prometheus Query: process_cpu_seconds_total
+Why: Detects CPU exhaustion or leaks.
+Memory Usage:
+Metric: Resident memory in MB
+Prometheus Query: process_resident_memory_bytes / 1024 / 1024
+Why: Detects memory leaks or OOM risks.
+Dashboard Layout Suggestion
+Top Row (Stat Panels):
+Request Rate
+Error Rate
+CPU Usage
+Memory Usage
+Second Row (Time Series):
+Request Latency (P50, P90, P99) over time
 
 ---
 

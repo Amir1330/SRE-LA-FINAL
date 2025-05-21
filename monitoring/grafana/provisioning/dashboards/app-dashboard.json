@@ -20,21 +20,21 @@
     {
       "type": "stat",
       "id": 1,
-      "title": "Total Request Count",
+      "title": "Request Rate (req/s)",
       "datasource": "Prometheus",
       "targets": [
-        { "expr": "sum(app_request_count_total)", "refId": "A" }
+        { "expr": "sum(rate(app_request_count_total[1m]))", "refId": "A" }
       ],
       "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
-      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] }
+      "fieldConfig": { "defaults": { "unit": "req/s" }, "overrides": [] }
     },
     {
       "type": "stat",
       "id": 2,
-      "title": "Error Rate (5xx)",
+      "title": "Error Rate (5xx %)",
       "datasource": "Prometheus",
       "targets": [
-        { "expr": "sum(app_request_count_total{http_status=~\"5..\"}) / sum(app_request_count_total)", "refId": "A" }
+        { "expr": "sum(rate(app_request_count_total{http_status=~\"5..\"}[1m])) / sum(rate(app_request_count_total[1m])) * 100", "refId": "A" }
       ],
       "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
       "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] }
@@ -42,72 +42,28 @@
     {
       "type": "stat",
       "id": 3,
-      "title": "Resident Memory (MB)",
-      "datasource": "Prometheus",
-      "targets": [
-        { "expr": "process_resident_memory_bytes / 1024 / 1024", "refId": "A" }
-      ],
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
-      "fieldConfig": { "defaults": { "unit": "megabytes" }, "overrides": [] }
-    },
-    {
-      "type": "stat",
-      "id": 4,
-      "title": "CPU Time (s)",
+      "title": "CPU Usage (s)",
       "datasource": "Prometheus",
       "targets": [
         { "expr": "process_cpu_seconds_total", "refId": "A" }
       ],
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
       "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] }
     },
     {
-      "type": "table",
-      "id": 5,
-      "title": "Python GC Collections by Generation",
-      "datasource": "Prometheus",
-      "targets": [
-        { "expr": "python_gc_collections_total", "refId": "A" }
-      ],
-      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 4 },
-      "fieldConfig": { "defaults": {}, "overrides": [] }
-    },
-    {
-      "type": "table",
-      "id": 6,
-      "title": "Python GC Objects Collected",
-      "datasource": "Prometheus",
-      "targets": [
-        { "expr": "python_gc_objects_collected_total", "refId": "A" }
-      ],
-      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 4 },
-      "fieldConfig": { "defaults": {}, "overrides": [] }
-    },
-    {
       "type": "stat",
-      "id": 7,
-      "title": "Python Version",
+      "id": 4,
+      "title": "Memory Usage (MB)",
       "datasource": "Prometheus",
       "targets": [
-        { "expr": "python_info", "refId": "A" }
+        { "expr": "process_resident_memory_bytes / 1024 / 1024", "refId": "A" }
       ],
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 10 },
-      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] }
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "megabytes" }, "overrides": [] }
     },
     {
       "type": "timeseries",
-      "id": 8,
-      "title": "Request Count by Endpoint/Status",
-      "datasource": "Prometheus",
-      "targets": [
-        { "expr": "sum by (endpoint, http_status) (app_request_count_total)", "refId": "A" }
-      ],
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
-      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] }
-    },
-    {
-      "type": "timeseries",
-      "id": 9,
+      "id": 5,
       "title": "Request Latency (P50, P90, P99)",
       "datasource": "Prometheus",
       "targets": [
@@ -115,16 +71,16 @@
         { "expr": "histogram_quantile(0.9, sum(rate(app_request_latency_seconds_bucket[1m])) by (le))", "legendFormat": "P90", "refId": "B" },
         { "expr": "histogram_quantile(0.99, sum(rate(app_request_latency_seconds_bucket[1m])) by (le))", "legendFormat": "P99", "refId": "C" }
       ],
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 22 },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
       "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] }
     }
   ],
   "refresh": "5s",
   "schemaVersion": 27,
   "style": "dark",
-  "tags": ["SRE", "Demo"],
+  "tags": ["SRE", "Essential"],
   "templating": { "list": [] },
   "time": { "from": "now-15m", "to": "now" },
-  "title": "SRE Python & App Metrics Dashboard",
-  "version": 1
+  "title": "Essential SRE Metrics Dashboard",
+  "version": 2
 } 

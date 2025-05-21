@@ -42,6 +42,8 @@ services:
       - prometheus
     networks:
       - app-network
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
 
 networks:
   app-network:
