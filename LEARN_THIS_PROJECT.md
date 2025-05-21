@@ -2,6 +2,7 @@
 
 ## 1. Project Overview
 This project demonstrates Site Reliability Engineering (SRE) principles using a simple web application stack. It includes a Flask backend, a static frontend, infrastructure as code (Terraform), CI/CD (GitHub Actions), and monitoring (Prometheus & Grafana).
+.
 
 ---
 
@@ -42,7 +43,7 @@ This project demonstrates Site Reliability Engineering (SRE) principles using a 
 - **Grafana:**
   - `grafana/provisioning/`: Dashboards and datasources auto-provisioned
   - `app-dashboard.json`: Example dashboard
-  
+
   Recommended SRE Dashboard: Key Metrics & Explanations
 1. Request Rate
 Metric: Total HTTP requests per second
