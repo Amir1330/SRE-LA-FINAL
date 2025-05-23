@@ -64,7 +64,7 @@
     - Tried to use `module.compute.instance_ids` without defining it in `outputs.tf`.
     - Fixed by adding a dummy output.
 
-#### Example Fix:
+#### Fix:
 ```hcl
 # infrastructure/modules/compute/outputs.tf
 output "instance_ids" {
